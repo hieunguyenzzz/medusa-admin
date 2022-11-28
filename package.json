@@ -98,7 +98,7 @@
     "vite": "^3.1.8"
   },
   "scripts": {
-    "dev": "vite --port 7000",
+    "dev": "vite --port 7001",
     "develop": "npm run dev",
     "check": "tsc",
     "build": "vite build",
@@ -113,6 +113,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/medusajs/admin"
+  },
+  "engines": {
+     "node": "v16.13.0"
   },
   "bugs": {
     "url": "https://github.com/medusajs/admin/issues"
