@@ -1,4 +1,3 @@
-import React from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -8,6 +7,7 @@ import PrivateRoute from "../components/private-route"
 import SEO from "../components/seo"
 import Layout from "../components/templates/layout"
 import AnalyticsProvider from "../context/analytics"
+import Checkouts from "../domain/checkouts"
 import Collections from "../domain/collections"
 import Customers from "../domain/customers"
 import Discounts from "../domain/discounts"
@@ -17,9 +17,9 @@ import Orders from "../domain/orders"
 import DraftOrders from "../domain/orders/draft-orders"
 import Pricing from "../domain/pricing"
 import ProductsRoute from "../domain/products"
+import PublishableApiKeys from "../domain/publishable-api-keys"
 import SalesChannels from "../domain/sales-channels"
 import Settings from "../domain/settings"
-import PublishableApiKeys from "../domain/publishable-api-keys"
 
 const IndexPage = () => {
   const navigate = useNavigate()
@@ -45,6 +45,7 @@ const DashboardRoutes = () => {
             <Route path="collections/*" element={<Collections />} />
             <Route path="gift-cards/*" element={<GiftCards />} />
             <Route path="orders/*" element={<Orders />} />
+            <Route path="checkouts/*" element={<Checkouts />} />
             <Route path="draft-orders/*" element={<DraftOrders />} />
             <Route path="discounts/*" element={<Discounts />} />
             <Route path="customers/*" element={<Customers />} />

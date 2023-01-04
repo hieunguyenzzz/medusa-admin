@@ -8,7 +8,7 @@ export const defaultFeatureFlagContext: {
 } = {
   featureToggleList: {},
   isFeatureEnabled: function (flag): boolean {
-    return !!this.featureToggleList[flag]
+    return !!this?.featureToggleList[flag]
   },
 }
 

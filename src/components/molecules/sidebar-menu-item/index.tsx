@@ -35,6 +35,7 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
       transitionTime={150}
       transitionCloseTime={150}
       {...triggerHandler()}
+      open
       trigger={
         <NavLink className={classNameFn} to={pageLink}>
           <span className="items-start">{icon}</span>
@@ -43,8 +44,8 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
       }
     >
       {subItems?.length > 0 &&
-        subItems.map(({ pageLink, text }) => (
-          <SubItem pageLink={pageLink} text={text} />
+        subItems.map(({ pageLink, text }, i) => (
+          <SubItem key={i} pageLink={pageLink} text={text} />
         ))}
     </Collapsible>
   )
@@ -60,7 +61,7 @@ const SubItem = ({ pageLink, text }: SidebarMenuSubitemProps) => {
 
   return (
     <NavLink className={classNameFn} to={pageLink}>
-      <span className="text-grey-90 text-small ml-3">{text}</span>
+      <span className="ml-9 text-grey-90 text-small">{text}</span>
     </NavLink>
   )
 }

@@ -1,3 +1,3 @@
-const medusaUrl = __MEDUSA_BACKEND_URL__ || "http://localhost:9000"
+const medusaUrl = __MEDUSA_BACKEND_URL__ || "https://medusa.hieunguyen.dev"
 
 export { medusaUrl }
