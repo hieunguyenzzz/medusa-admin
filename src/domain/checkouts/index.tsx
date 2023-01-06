@@ -3,10 +3,13 @@ import moment from "moment"
 import { useLayoutEffect, useMemo, useState } from "react"
 import { Route, Routes, useNavigate, useParams } from "react-router-dom"
 import { usePagination, useTable } from "react-table"
+import Avatar from "../../components/atoms/avatar"
 import Spinner from "../../components/atoms/spinner"
 import Tooltip from "../../components/atoms/tooltip"
 import ClipboardCopyIcon from "../../components/fundamentals/icons/clipboard-copy-icon"
+import DetailsIcon from "../../components/fundamentals/icons/details-icon"
 import RefreshIcon from "../../components/fundamentals/icons/refresh-icon"
+import { ActionType } from "../../components/molecules/actionables"
 import Modal from "../../components/molecules/modal"
 import Table from "../../components/molecules/table"
 import BodyCard from "../../components/organisms/body-card"
@@ -167,6 +170,7 @@ const OrderIndex = () => {
   }, [])
   const navigate = useNavigate()
   console.log({ data })
+
   return (
     <>
       <div className="flex flex-col h-full grow">
@@ -209,18 +213,33 @@ const OrderIndex = () => {
 const DetailsModal = ({ handleCancel }) => {
   const { id } = useParams()
   const [data, setData] = useState()
+  const [customer, setCustomer] = useState()
+  const navigate = useNavigate()
   useLayoutEffect(() => {
     Medusa.abadonedCarts.retrieve(id).then((res) => {
       setData(res.data)
     })
   }, [id])
-  console.log("item", data)
+  useLayoutEffect(() => {
+    if (data?.cart?.customer_id) {
+      Medusa.customers.retrieve(data?.cart?.customer_id).then((res) => {
+        setCustomer(res.data.customer)
+      })
+    }
+  }, [data?.cart?.customer_id])
   let items = data?.lineItems || []
   let total = items.reduce((result, item) => {
     result = result + item.quantity * item.unit_price
     return result
   }, 0)
   let currencyCode = "GBP"
+  const customerActionables: ActionType[] = [
+    {
+      label: "Go to Customer",
+      icon: <DetailsIcon size={"20"} />,
+      onClick: () => navigate(`/a/customers/${data?.cart?.customer_id}`),
+    },
+  ]
   return (
     <Modal handleClose={handleCancel} isLargeModal>
       <Modal.Body>
@@ -251,12 +270,40 @@ const DetailsModal = ({ handleCancel }) => {
                     />
                   ))}
                   <DisplayTotal
+                    variant="label"
                     currency={currencyCode}
                     totalAmount={total}
                     totalTitle={"Total"}
                   />
                 </div>
               </BodyCard>
+              {customer ? (
+                <BodyCard
+                  className={"w-full mb-4 min-h-0 h-auto"}
+                  title="Customer"
+                  actionables={customerActionables}
+                >
+                  <div className="mt-6">
+                    <div className="flex items-center w-full space-x-4">
+                      <div className="flex w-[40px] h-[40px] ">
+                        <Avatar
+                          user={customer}
+                          font="inter-large-semibold"
+                          color="bg-fuschia-40"
+                        />
+                      </div>
+                      <div>
+                        <div>{customer.first_name}</div>
+                        <div>{data?.cart.email}</div>
+                      </div>
+                    </div>
+                  </div>
+                </BodyCard>
+              ) : (
+                <BodyCard className="flex items-center justify-center w-full pt-2xlarge">
+                  <Spinner size={"large"} variant={"secondary"} />
+                </BodyCard>
+              )}
             </div>
           )}
         </Modal.Content>
